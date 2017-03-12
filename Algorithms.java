@@ -308,7 +308,7 @@ public class Algorithms {
       
         File save = new File("C://Users//ayo//Desktop//dta.txt");
         FileInputStream fis = new FileInputStream(save);
-        for(int x = 0; x < length-1; x++)
+        for(int x = 0; x < length; x++)
             retrievedArray[x] = fis.read();
         return retrievedArray;
     }
