@@ -66,7 +66,7 @@ public class Algorithms {
         do{
         System.out.println("\nWhat algorithm would you like to use? "+
                 "\n1. Insertion Sort\n2. Selection Sort\n3. Radix Sort\n4. Heap Sort"
-        +"5. Merge Sort\n6. Quick Sort\n");
+        +"\n5. Merge Sort\n6. Quick Sort\n");
         choice = keyboard.nextInt();
         switch(choice)
         {
@@ -91,7 +91,7 @@ public class Algorithms {
                 end = System.currentTimeMillis();
                 totalTime = end - start;
                 System.out.print("\nThis process took "+totalTime+"ms.\n");
-                break;  
+                break; */ 
             case 4:
                 start = System.currentTimeMillis();
                 heapSort(arrayToBeSorted);
@@ -99,6 +99,7 @@ public class Algorithms {
                 totalTime = end - start;
                 System.out.print("\nThis process took "+totalTime+"ms.\n");
                 break;
+                /*
             case 5:
                 start = System.currentTimeMillis();
                 mergeSort(arrayToBeSorted);
@@ -222,11 +223,52 @@ public class Algorithms {
    {
 
    }
-   public static int[] heapSort(int[] x)
-   {
-       
-   }
    */
+   public static int[] heapSort(int[] toSort)
+   {
+       int N = toSort.length-1;
+     
+          {       
+        heapify(toSort, N);        
+        for (int i = N; i > 0; i--)
+        {
+            swap(toSort,0, i);
+            N = N-1;
+            maxheap(toSort, 0, N);
+        }
+        }
+          for(int z = 0; z<toSort.length; z++)
+            System.out.print(toSort[z]);
+        return toSort;
+   }
+   public static void heapify(int toSort[], int N)
+    {
+        N = toSort.length-1;
+        for (int i = N/2; i >= 0; i--)
+            maxheap(toSort, i, N);        
+    }
+   public static void maxheap(int[] toSort, int i, int N)
+    { 
+        int left = 2*i ;
+        int right = 2*i + 1;
+        int max = i;
+        if (left <= N && toSort[left] > toSort[i])
+            max = left;
+        if (right <= N && toSort[right] > toSort[max])        
+            max = right;
+ 
+        if (max != i)
+        {
+            swap(toSort, i, max);
+            maxheap(toSort, max, N);
+        }
+    }    
+   public static void swap(int toSort[], int i, int j)
+    {
+        int tmp = toSort[i];
+        toSort[i] = toSort[j];
+        toSort[j] = tmp; 
+    }    
    /*
    public static int[] mergeSort(int[] x)
    {
