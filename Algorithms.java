@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//Made with Duct tape
 package algorithms;
 import java.util.*;
 import java.io.*;
@@ -18,6 +14,7 @@ public class Algorithms {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         // TODO code application logic here
+        int[] savedArray = null;
         int sizeOfArray;
         int choiceOrder;
         int choice;
@@ -38,27 +35,35 @@ public class Algorithms {
         {
             case 1:
                 arrayToBeSorted = inOrder(sizeOfArray).clone();
+                savedArray = new int[arrayToBeSorted.length];
                 for(int k = 0; k<arrayToBeSorted.length; k++)
-                    System.out.print(arrayToBeSorted[k]);
-                save(arrayToBeSorted);
+                    System.out.print(arrayToBeSorted[k]+" ");
+                for(int n = 0; n < arrayToBeSorted.length; n++)
+                    savedArray[n] = arrayToBeSorted[n];
                 break;
             case 2:
-                arrayToBeSorted = reverseOrder(sizeOfArray).clone();
+              arrayToBeSorted = reverseOrder(sizeOfArray).clone();
+                savedArray = new int[arrayToBeSorted.length];
                 for(int k = 0; k<arrayToBeSorted.length; k++)
-                    System.out.print(arrayToBeSorted[k]);
-                save(arrayToBeSorted);
+                    System.out.print(arrayToBeSorted[k]+" ");
+                for(int n = 0; n < arrayToBeSorted.length; n++)
+                    savedArray[n] = arrayToBeSorted[n];
                 break;
             case 3:
-                arrayToBeSorted = almostOrder(sizeOfArray).clone();
+             arrayToBeSorted = almostOrder(sizeOfArray).clone();
+                savedArray = new int[arrayToBeSorted.length];
                 for(int k = 0; k<arrayToBeSorted.length; k++)
-                    System.out.print(arrayToBeSorted[k]);
-                save(arrayToBeSorted);
+                    System.out.print(arrayToBeSorted[k]+" ");
+                for(int n = 0; n < arrayToBeSorted.length; n++)
+                    savedArray[n] = arrayToBeSorted[n];
                 break;
             case 4:
-                arrayToBeSorted = randomOrder(sizeOfArray).clone();
+          arrayToBeSorted = randomOrder(sizeOfArray).clone();
+                savedArray = new int[arrayToBeSorted.length];
                 for(int k = 0; k<arrayToBeSorted.length; k++)
-                    System.out.print(arrayToBeSorted[k]);
-                save(arrayToBeSorted);
+                    System.out.print(arrayToBeSorted[k]+" ");
+                for(int n = 0; n < arrayToBeSorted.length; n++)
+                    savedArray[n] = arrayToBeSorted[n];
                 break;
             default:
                 break;
@@ -85,13 +90,13 @@ public class Algorithms {
                 totalTime = end - start;
                 System.out.print("\nThis process took "+totalTime+"ms.\n");
                 break;
-            /*case 3:
+            case 3:
                 start = System.currentTimeMillis();
                 radixSort(arrayToBeSorted);
                 end = System.currentTimeMillis();
                 totalTime = end - start;
                 System.out.print("\nThis process took "+totalTime+"ms.\n");
-                break; */ 
+                break; 
             case 4:
                 start = System.currentTimeMillis();
                 heapSort(arrayToBeSorted);
@@ -99,7 +104,7 @@ public class Algorithms {
                 totalTime = end - start;
                 System.out.print("\nThis process took "+totalTime+"ms.\n");
                 break;
-                /*
+                
             case 5:
                 start = System.currentTimeMillis();
                 mergeSort(arrayToBeSorted);
@@ -107,7 +112,7 @@ public class Algorithms {
                 totalTime = end - start;
                 System.out.print("\nThis process took "+totalTime+"ms.\n");
                 break;
-                */
+                
             case 6:
                 start = System.currentTimeMillis();
                 quickSort(arrayToBeSorted);
@@ -121,7 +126,12 @@ public class Algorithms {
         System.out.println("\nPress '1' to use the same data on a different algorithm! ");
         restart = keyboard.nextInt();
         if(restart == 1)
-            arrayToBeSorted = load(sizeOfArray).clone();
+        {
+            arrayToBeSorted = savedArray.clone();
+            System.out.println("The following array was loaded: \n");
+            for(int x = 0; x < arrayToBeSorted.length; x++)
+                System.out.print(arrayToBeSorted[x]+" ");
+        }
         else
             break;
     }while(restart != 0);
@@ -196,7 +206,7 @@ public class Algorithms {
             }
         }
         for(int z = 0; z<toSort.length; z++)
-            System.out.print(toSort[z]);
+            System.out.print(toSort[z]+" ");
         return toSort;
  
    }
@@ -215,15 +225,61 @@ public class Algorithms {
 	        toSort[i] = smallerNumber;
 	    }
        for(int z = 0; z<toSort.length; z++)
-            System.out.print(toSort[z]);
+            System.out.print(toSort[z]+" ");
        return toSort;
    }
-   /*
-   public static int[] radixSort(int[] x)
+   
+   public static int[] radixSort(int[] toSort)
    {
-
+       int length = toSort.length;
+        // Find the maximum number to know number of digits
+        int m = getMax(toSort, length);
+ 
+        // Do counting sort for every digit. Note that instead
+        // of passing digit number, exp is passed. exp is 10^i
+        // where i is current digit number
+        for (int exp = 1; m/exp > 0; exp *= 10)
+            countSort(toSort, length, exp);
+        for(int z = 0; z<toSort.length; z++)
+            System.out.print(toSort[z]+" ");
+        return toSort;
    }
-   */
+   static int getMax(int[] toSort, int length)
+    {
+        int mx = toSort[0];
+        for (int i = 1; i < length; i++)
+            if (toSort[i] > mx)
+                mx = toSort[i];
+        return mx;
+    }
+   static void countSort(int[] toSort, int length, int exp)
+    {
+        int output[] = new int[length]; // output array
+        int i;
+        int count[] = new int[10];
+        Arrays.fill(count,0);
+ 
+        // Store count of occurrences in count[]
+        for (i = 0; i < length; i++)
+            count[ (toSort[i]/exp)%10 ]++;
+ 
+        // Change count[i] so that count[i] now contains
+        // actual position of this digit in output[]
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+ 
+        // Build the output array
+        for (i = length - 1; i >= 0; i--)
+        {
+            output[count[ (toSort[i]/exp)%10 ] - 1] = toSort[i];
+            count[ (toSort[i]/exp)%10 ]--;
+        }
+ 
+        // Copy the output array to arr[], so that arr[] now
+        // contains sorted numbers according to curent digit
+        for (i = 0; i < length; i++)
+            toSort[i] = output[i];
+    }
    public static int[] heapSort(int[] toSort)
    {
        int N = toSort.length-1;
@@ -238,7 +294,7 @@ public class Algorithms {
         }
         }
           for(int z = 0; z<toSort.length; z++)
-            System.out.print(toSort[z]);
+            System.out.print(toSort[z]+" ");
         return toSort;
    }
    public static void heapify(int toSort[], int N)
@@ -269,12 +325,60 @@ public class Algorithms {
         toSort[i] = toSort[j];
         toSort[j] = tmp; 
     }    
-   /*
-   public static int[] mergeSort(int[] x)
+   
+   public  static int[] mergeSort(int[] toSort)
    {
+       int[] tempMergArr;
+       int length;
        
+        length = toSort.length;
+        tempMergArr = new int[length];
+        doMergeSort(0, length - 1, toSort, tempMergArr);
+        for(int z = 0; z<toSort.length; z++)
+            System.out.print(toSort[z]+" ");
+        return toSort;
    }
-   */
+   private static void mergeParts(int lowerIndex, int middle, int higherIndex, int[] toSort, int[] tempMergArr) {
+ 
+        for (int i = lowerIndex; i <= higherIndex; i++) {
+            tempMergArr[i] = toSort[i];
+        }
+        int i = lowerIndex;
+        int j = middle + 1;
+        int k = lowerIndex;
+        while (i <= middle && j <= higherIndex) {
+            if (tempMergArr[i] <= tempMergArr[j]) {
+                toSort[k] = tempMergArr[i];
+                i++;
+            } else {
+                toSort[k] = tempMergArr[j];
+                j++;
+            }
+            k++;
+        }
+        while (i <= middle) {
+            toSort[k] = tempMergArr[i];
+            k++;
+            i++;
+        }
+ 
+    }
+
+   private static int[] doMergeSort(int lowerIndex, int higherIndex, int[] toSort, int[] tempMergArr) {
+         
+        if (lowerIndex < higherIndex) {
+            int middle = lowerIndex + (higherIndex - lowerIndex) / 2;
+            // Below step sorts the left side of the array
+            doMergeSort(lowerIndex, middle, toSort, tempMergArr);
+            // Below step sorts the right side of the array
+            doMergeSort(middle + 1, higherIndex, toSort, tempMergArr);
+            // Now merge both sides
+            mergeParts(lowerIndex, middle, higherIndex, toSort, tempMergArr);
+        }
+        return toSort;
+    }
+
+   
    
    public static int[] quickSort(int[] toSort)
    {
@@ -285,7 +389,7 @@ public class Algorithms {
         quickSort(0, length - 1, toSort);
                
         for(int z = 0; z<toSort.length; z++)
-            System.out.print(toSort[z]);
+            System.out.print(toSort[z]+" ");
         
         return toSort;
    }
@@ -330,29 +434,35 @@ public class Algorithms {
         array[j] = temp;
     }
      
-   // add a method here to save the first array created for re use
-   //one will be save(int[] toBeSaved)
-    public static void save(int[] toBeSaved) throws FileNotFoundException, IOException
+  //try to add file output/input later
+    public static void save(int[] toBeSaved, int[] savedArray) throws FileNotFoundException, IOException
     {
+        /*
      File save = new File("C://Users//ayo//Desktop//dta.txt");
-     FileOutputStream fos = new FileOutputStream(save, false);
+     FileOutputStream fos = new FileOutputStream(save);
      for(int x = 0; x < toBeSaved.length; x++)
      {
      fos.write(toBeSaved[x]);
+    
      }
-     fos.close();
+     fos.close();*/
+        savedArray = toBeSaved.clone();
     
     }
    //one will be public int[] load()
-    public static int[] load(int length) throws FileNotFoundException, IOException
+    public static int[] load(int[] savedArray) throws FileNotFoundException, IOException
     {
+        /*
         int[] retrievedArray = new int[length];
       
         File save = new File("C://Users//ayo//Desktop//dta.txt");
         FileInputStream fis = new FileInputStream(save);
         for(int x = 0; x < length; x++)
             retrievedArray[x] = fis.read();
+        fis.close();
         return retrievedArray;
+*/
+        return savedArray;
     }
 
 }
